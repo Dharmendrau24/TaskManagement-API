@@ -121,7 +121,7 @@ Make sure you have installed:
 Clone the repository:
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone <https://github.com/Dharmendrau24/TaskManagement-API>
 cd task_management_app
 ```
 
