@@ -68,7 +68,7 @@ def client():
 @pytest.fixture
 def auth_client(client):
     username = "testuser"
-    password = "testpassword123"
+    password = "testuser@123"
 
     register_response = client.post(
         "/user/register",
@@ -115,7 +115,7 @@ def second_auth_client():
     client = create_test_client()
 
     username = "testuser2"
-    password = "testpassword123"
+    password = "testuser@123"
 
     try:
         # Register User 2
@@ -144,8 +144,6 @@ def second_auth_client():
 
         token = login_response.json()["token"]
 
-        # IMPORTANT:
-        # This is a completely separate TestClient from User 1.
         client.headers.update({
             "Authorization": f"Bearer {token}"
         })

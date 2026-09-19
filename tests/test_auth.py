@@ -1,17 +1,10 @@
-from fastapi.testclient import TestClient
-from main import app
-
-
-client = TestClient(app)
-
-
-def test_login():
-    response = client.post(
+def test_login(auth_client):
+    response = auth_client.post(
         "/user/login",
         json={
-            "username": "dharmendra",
-            "password": "dharm"
-        }
+            "username": "testuser",
+            "password": "testuser@123",
+        },
     )
 
     assert response.status_code == 200
@@ -22,71 +15,58 @@ def test_login():
     assert data["token"]
 
 
-def test_authenticated_user():
-    login_response = client.post(
-        "/user/login",
-        json={
-            "username": "dharmendra",
-            "password": "dharm"
-        }
-    )
-
-    assert login_response.status_code == 200
-
-    token = login_response.json()["token"]
-
-    response = client.get(
-        "/user/is_auth",
-        headers={
-            "Authorization": f"Bearer {token}"
-        }
-    )
+def test_authenticated_user(auth_client):
+    response = auth_client.get("/user/is_auth")
 
     assert response.status_code == 200
 
     data = response.json()
 
-    assert data["username"] == "dharmendra"
+    assert data["username"] == "testuser"
 
 
-def test_login_invalid_password():
-    response = client.post(
+def test_login_invalid_password(auth_client):
+    response = auth_client.post(
         "/user/login",
         json={
-            "username": "dharmendra",
-            "password": "wrong-password"
-        }
+            "username": "testuser",
+            "password": "wrong-password",
+        },
     )
 
     assert response.status_code == 401
 
-def test_get_tasks_without_authentication():
+
+def test_get_tasks_without_authentication(client):
     response = client.get("/tasks")
 
     assert response.status_code == 401
 
-def test_get_tasks_with_invalid_token():
+
+def test_get_tasks_with_invalid_token(client):
     response = client.get(
         "/tasks",
         headers={
-            "Authorization": "Bearer invalid-token"
-        }
+            "Authorization": "Bearer invalid-token",
+        },
     )
 
     assert response.status_code == 401
 
-def test_is_auth_without_token():
+
+def test_is_auth_without_token(client):
     response = client.get("/user/is_auth")
 
     assert response.status_code == 401
 
-def test_login_invalid_username():
+
+def test_login_invalid_username(client):
     response = client.post(
         "/user/login",
         json={
             "username": "user_that_does_not_exist",
-            "password": "any-password"
-        }
+            "password": "any-password",
+        },
     )
 
     assert response.status_code == 401
