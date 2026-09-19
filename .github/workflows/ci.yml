@@ -1,4 +1,3 @@
-
 name: FastAPI CI
 
 on:
@@ -29,8 +28,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           python -m pip show httpx2
-          python -m pip show httpx
 
       - name: Run tests
         run: pytest -v
-
