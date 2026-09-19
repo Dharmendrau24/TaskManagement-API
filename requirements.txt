@@ -4,6 +4,6 @@ sqlalchemy
 psycopg2-binary
 pydantic
 pydantic-settings
-python-jose[cryptography]
+PyJWT
 pwdlib[argon2]
 alembic
